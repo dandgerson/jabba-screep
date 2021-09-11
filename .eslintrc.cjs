@@ -13,6 +13,13 @@ module.exports = {
   },
   rules: {
     semi: [2, 'never'],
-    'no-shadow': 'allow',
+    'no-shadow': 0,
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'always',
+      },
+    ],
   },
 }

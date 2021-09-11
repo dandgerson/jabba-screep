@@ -1,60 +1,49 @@
 import readline from 'readline'
-import fs from 'fs'
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
+import Game from './src/Game.js'
+
+const game = new Game({
+  character: {
+    name: 'Dandgeson',
+    race: 'Human',
+  },
 })
 
-const saveCharacter = () => {
-  const url = new URL(`./src/characters/${character.name}.json`, import.meta.url)
-  fs.writeFile(url, JSON.stringify(character), (err) => {
-    if (err) console.error(err)
+const handleKeyPress = (sequence, key) => {
+  const keyMap = {
+    moveLeft: 'h',
+    moveDown: 'j',
+    moveUp: 'k',
+    moveRight: 'l',
+  }
 
-    console.log('The character was saved.')
-  })
+  if (key.ctrl && key.name === 'c') {
+    game.save()
+  }
+
+  switch (sequence) {
+    case keyMap.moveLeft: {
+      console.log('moveLeft', sequence)
+      break
+    }
+    case keyMap.moveRight: {
+      console.log('moveRight', sequence)
+      break
+    }
+    case keyMap.moveUp: {
+      console.log('moveUp', sequence)
+      break
+    }
+    case keyMap.moveDown: {
+      console.log('moveDown', sequence)
+      break
+    }
+    default: break
+  }
 }
 
-const startGame = (character) => {
-  console.log(`You are ${character.name} The ${character.race}!`)
+game.start()
 
-  process.stdin.setRawMode(true);
-  process.stdin.on('keypress', (...args) => {
-    console.log({ args })
-  })
-}
-
-const endGame = () => {
-  rl.question('Save your Character? ', (answer) => {
-    if (answer.match(/^y(es)?$/i)) saveCharacter()
-
-    rl.question('Are you sure you want to exit? ', (answer) => {
-      if (answer.match(/^y(es)?$/i)) rl.pause()
-    })
-  })
-}
-
-const character = {}
-
-rl.question('Who are you? ', (answer) => {
-  // TODO: Log the answer in a database
-  character.name = answer
-  console.log(`You are the ${character.name}`)
-
-  // rl.close();
-  rl.question('What is your race? ', (answer) => {
-    character.race = answer
-    console.log(`Your race is ${character.race}`)
-
-
-    rl.question('Ready for Adventure? ', (answer) => {
-      if (answer.match(/^y(es)?$/i)) startGame(character)
-    })
-  })
-})
-
-
-
-
-rl.on('close', () => endGame())
-rl.on('SIGINT', () => endGame())
+readline.emitKeypressEvents(process.stdin)
+process.stdin.setRawMode(true)
+process.stdin.on('keypress', handleKeyPress)
