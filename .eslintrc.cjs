@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    node: true,
   },
   extends: [
     'airbnb-base',
@@ -11,6 +12,7 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    semi: 'never',
+    semi: [2, 'never'],
+    'no-shadow': 'allow',
   },
-};
+}
