@@ -1,8 +1,8 @@
 # Jabba Screep
 
-Jabba Screep is the experimental expirience with node js and roguelike style
+Jabba Screep is experimental experience with node js and roguelike style
 
-## RoadMap to implementation
+## Implementation RoadMap
 
 - [x] log the keypress
 - [x] save the characters into `src/characters/{characterName}`
