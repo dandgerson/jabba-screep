@@ -4,7 +4,7 @@ import Game from './src/Game.js'
 
 const game = new Game({
   character: {
-    name: 'Dandgeson',
+    name: 'Dandgerson',
     race: 'Human',
   },
 })
@@ -42,8 +42,11 @@ const handleKeyPress = (sequence, key) => {
   }
 }
 
-game.start()
-
 readline.emitKeypressEvents(process.stdin)
 process.stdin.setRawMode(true)
 process.stdin.on('keypress', handleKeyPress)
+
+game.on('start', () => console.log('Game started!'))
+game.on('save', () => console.log('Game saved!'))
+
+game.start()
