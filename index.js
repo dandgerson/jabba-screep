@@ -1,55 +1,27 @@
-import readline from 'readline'
+import fs from 'fs'
 
-import Game from './src/Game.js'
+import Engine from './src/Engine.js'
 
-const game = new Game({
-  character: {
-    name: 'Dandgerson',
-    race: 'Human',
-  },
-})
+const engine = new Engine()
+engine.init()
 
-const handleKeyPress = (sequence, key) => {
-  const keyMap = {
-    moveLeft: 'h',
-    moveDown: 'j',
-    moveUp: 'k',
-    moveRight: 'l',
-  }
-
-  if (key.ctrl && key.name === 'c') {
-    game.save()
-  }
-
-  switch (sequence) {
-    case keyMap.moveLeft: {
-      console.log('moveLeft', sequence)
-      break
-    }
-    case keyMap.moveRight: {
-      console.log('moveRight', sequence)
-      break
-    }
-    case keyMap.moveUp: {
-      console.log('moveUp', sequence)
-      break
-    }
-    case keyMap.moveDown: {
-      console.log('moveDown', sequence)
-      break
-    }
-    default: break
-  }
+const character = {
+  name: 'Dandgerson',
+  race: 'Human',
 }
 
-readline.emitKeypressEvents(process.stdin)
-process.stdin.setRawMode(true)
-process.stdin.on('keypress', handleKeyPress)
+engine.on('start', () => console.log('--> Game started!'))
+engine.on('save', () => {
+  const url = new URL(`./src/characters/${character.name}.json`, import.meta.url)
+  fs.writeFile(url, JSON.stringify(character), (err) => {
+    if (err) console.error(err)
 
-game.on('start', () => console.log('--> Game started!'))
-game.on('save', () => console.log('--> Game saved!'))
+    console.log('--> Game saved!')
+    process.exit()
+  })
+})
 
-game.start()
+engine.start()
 
 console.log({
   isTTY: process.stdout.isTTY,
@@ -85,12 +57,6 @@ const clearScreen = () => {
 const hRune = '\u16BA'
 
 clearScreen()
-renderRow({
-  x: 1,
-  y: 4,
-  str: 'Dandgerson',
-  color: c.colors.red,
-})
 
 const layout = {
   statusArea: {
@@ -104,22 +70,56 @@ const layout = {
 const renderStatusArea = () => {
   const boxConfig = {
     size: {
-      columns: 10,
-      rows: 10,
+      columns: 30,
+      rows: 20,
+    },
+    corners: {
+      topLeft: {
+        coords: [1, 1], // [y, x]
+        symbol: '\u2554',
+      },
+      bottomLeft: {
+        get coords() { return [boxConfig.size.rows, 1] },
+        symbol: '\u255A',
+      },
+      topRight: {
+        get coords() { return [1, boxConfig.size.columns] },
+        symbol: '\u2557',
+      },
+      bottomRight: {
+        get coords() { return [boxConfig.size.rows, boxConfig.size.columns] },
+        symbol: '\u255D',
+      },
     },
     symbols: {
-      leftTopCorner: '\u2554',
-      leftBottomCorner: '\u255A',
-      rightTopCorner: '\u2557',
-      rigntBottomCorner: '\u255D',
       horizontal: '\u2550',
       vertical: '\u2551',
     },
   }
 
-  Array.from(Array(boxConfig.size.rows).keys()).forEach(row => {
-    console.log({ row })
-  })
+  for (let row = 1; row <= boxConfig.size.rows; row++) {
+    for (let column = 1; column <= boxConfig.size.columns; column++) {
+      switch ([row, column].toString()) {
+        case boxConfig.corners.topLeft.coords.toString(): {
+          renderRow({ y: row + 1, x: column + 1, str: boxConfig.corners.topLeft.symbol })
+          break
+        }
+        case boxConfig.corners.topRight.coords.toString(): {
+          renderRow({ y: row + 1, x: column + 1, str: boxConfig.corners.topRight.symbol })
+          break
+        }
+        case boxConfig.corners.bottomRight.coords.toString(): {
+          renderRow({ y: row + 1, x: column + 1, str: boxConfig.corners.bottomRight.symbol })
+          break
+        }
+        case boxConfig.corners.bottomLeft.coords.toString(): {
+          renderRow({ y: row + 1, x: column + 1, str: boxConfig.corners.bottomLeft.symbol })
+          break
+        }
+        default: renderRow({ y: row + 1, x: column + 1, str: '.' })
+      }
+    }
+  }
 }
 
 renderStatusArea()
