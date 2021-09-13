@@ -23,8 +23,6 @@ class Game extends EventEmitter {
 
   start() {
     this.emitEvent('start')
-
-    console.log(`You are ${this.character.name} The ${this.character.race}!`)
   }
 }
 
