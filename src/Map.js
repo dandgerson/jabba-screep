@@ -8,6 +8,10 @@ class Map extends EventEmmiter {
     this.tileMap = []
   }
 
+  emitEvent(eventName) {
+    process.nextTick(() => this.emit(eventName))
+  }
+
   generateMap({ height, width }) {
     this.tileMap = Array.from(
       { length: height },

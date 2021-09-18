@@ -7,15 +7,15 @@ class Engine extends EventEmitter {
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
+  emitEvent(eventName) {
+    process.nextTick(() => this.emit(eventName))
+  }
+
   stop() {
-    this.emit('stop')
+    this.emitEvent('stop')
     console.log('--> Engine stopped!')
 
     process.exit()
-  }
-
-  emitEvent(eventName) {
-    process.nextTick(() => this.emit(eventName))
   }
 
   init() {

@@ -26,9 +26,7 @@ engine.on('start', () => {
     width: screen.buffer.gameMap.width,
   })
 
-  process.nextTick(() => {
-    engine.emit('mapUpdated')
-  })
+  engine.emitEvent('mapUpdated')
 })
 
 engine.on('save', () => {
