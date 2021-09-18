@@ -14,21 +14,6 @@ const screen = new Screen()
 
 engine.init()
 
-const screenBuffer = {
-  gameMap: {
-    y: 1,
-    x: 1,
-    height: 20,
-    width: process.stdout.columns,
-  },
-  statusArea: {
-    x: 1,
-    y: process.stdout.rows - 10,
-    width: process.stdout.columns,
-    height: 10,
-  },
-}
-
 const map = new Map()
 
 engine.on('start', () => {
@@ -37,8 +22,8 @@ engine.on('start', () => {
   screen.clear()
 
   map.generateMap({
-    height: screenBuffer.gameMap.height,
-    width: screenBuffer.gameMap.width,
+    height: screen.buffer.gameMap.height,
+    width: screen.buffer.gameMap.width,
   })
 
   process.nextTick(() => {
@@ -57,12 +42,6 @@ engine.on('mapUpdated', () => {
 })
 
 engine.start()
-
-engine.on('stop', () => {
-  console.log('--> Engine stopped!')
-
-  process.exit()
-})
 
 // const hRune = '\u16BA'
 

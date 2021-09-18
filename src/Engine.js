@@ -9,6 +9,9 @@ class Engine extends EventEmitter {
 
   stop() {
     this.emit('stop')
+    console.log('--> Engine stopped!')
+
+    process.exit()
   }
 
   emitEvent(eventName) {

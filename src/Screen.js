@@ -13,6 +13,21 @@ class Screen extends EventEmitter {
         red: '[31m',
       },
     }
+
+    this.buffer = {
+      gameMap: {
+        y: 1,
+        x: 1,
+        height: 20,
+        width: process.stdout.columns,
+      },
+      statusArea: {
+        x: 1,
+        y: process.stdout.rows - 10,
+        width: process.stdout.columns,
+        height: 10,
+      },
+    }
   }
 
   clear() {
